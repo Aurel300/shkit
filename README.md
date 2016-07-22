@@ -31,28 +31,28 @@ Scripts included
 
 Creates a new haxe project / class in the current working directory.
 
-    ```bash
-    nuhx neko nekoproject
-    nuhx eneko autoexecnekoproject
-    nuhx js javascriptproject
-    nuhx flash swfproject
-    nuhx ludum ludumdaregame
-    nuhx flash swfproject 320 240 60
-    ```
+```bash
+nuhx neko nekoproject
+nuhx eneko autoexecnekoproject
+nuhx js javascriptproject
+nuhx flash swfproject
+nuhx ludum ludumdaregame
+nuhx flash swfproject 320 240 60
+```
 
 When creating classes, `nuhx` tries to locate a `make.hxml` file in the directory structure. If found, the package for the class is set accordingly. Use a dummy `make.hxml` file at the root of a library structure to make use of this feature if needed.
 
-    ```bash
-    nuhx cl MyClass
-    ```
+```bash
+nuhx cl MyClass
+```
 
-    Creates `MyClass.hx` containing a skeleton class `MyClass`.
+Creates `MyClass.hx` containing a skeleton class `MyClass`.
 
-    ```bash
-    nuhx cl MyBetterClass MyClass
-    ```
+```bash
+nuhx cl MyBetterClass MyClass
+```
 
-    Creates a skeleton class `MyBetterClass` that extends `MyClass`.
+Creates a skeleton class `MyBetterClass` that extends `MyClass`.
 
 ### `makedl` - temporary one-file HTTP server
 
