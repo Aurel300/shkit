@@ -6,15 +6,15 @@ A bunch of useful scripts for the (OS X) terminal, especially useful for haxe de
 
 To use these tools, simply download the tools you'd like or clone this repository:
 
-    ```bash
-    git clone https://github.com/Aurel300/shkit.git
-    ```
+```bash
+git clone https://github.com/Aurel300/shkit.git
+```
 
 Then add the resulting `shkit` directory to your `PATH` environment variable, by adding this line to your `~/.profile`:
 
-    ```bash
-    export PATH="/path/to/shkit/bin:$PATH"
-    ```
+```bash
+export PATH="/path/to/shkit/bin:$PATH"
+```
 
 ### Compatibility
 
