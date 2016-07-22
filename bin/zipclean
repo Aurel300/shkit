@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# zipclean
+#   by Aurel Bílý (2015-16)
+#   https://github.com/Aurel300/shkit
+#   see LICENSE file
+
+if [[ $# -lt 1 ]]; then
+    printf -- "zipclean: mac .zip cleaning tool\n"
+    printf -- "usage:\n"
+    printf -- "  zipclean <file>[ <file>...]\n"
+    printf -- "\n"
+    printf -- "    <file>\n"
+    printf -- "      path to a .zip file\n"
+    exit
+fi
+
+while [[ $# -gt 0 ]]; do
+    printf -- "cleaning $1 ... "
+    if [[ ! -e "$1" ]]; then
+        printf -- "no such file! abort\n"
+        exit
+    fi
+    printf -- "\n"
+    zip -d "$1" __MACOSX/\* \*/.DS_Store
+    printf -- "\n"
+    shift
+done

@@ -2,6 +2,7 @@
 
 # nuhx
 #   by Aurel Bílý (2015-16)
+#   https://github.com/Aurel300/shkit
 #   see LICENSE file
 
 # $cpmacros
@@ -9,35 +10,35 @@
 cpmacros="--macro addClassPath('/DevProjects/Libs/hx2')\n"
 
 function usage(){
-    echo "nuhx: create new haxe project / class here"
-    echo "usage:"
-    echo "  nuhx [e]neko <projname>"
-    echo "  nuhx js <projname>"
-    echo "  nuhx flash <projname>[ <w>[ <h>[ <fps>]]]"
-    echo "  nuhx ludum <projname>[ <w>[ <h>[ <fps>]]]"
-    echo
-    echo "    eneko, neko, js, flash, ludum"
-    echo "      type of project"
-    echo "      eneko is an auto-exec neko (runs automatically after a build)"
-    echo "      ludum flash projects create a bootstrap directory structure"
-    echo "    <projname>"
-    echo "      name of project and output files"
-    echo "    <w>, <h>, <fps>"
-    echo "      width, height and fps of a flash project"
-    echo "      (defaults: 640x480, 60 fps)"
-    echo
-    echo "  nuhx cl <class>[ <extends>]"
-    echo "    creates an empty .hx class"
-    echo "    the package is traced up the directory structure"
-    echo "    until a make.hxml file is encountered"
-    echo
-    echo "    <class>"
-    echo "      name of module"
-    echo "    <extends>"
-    echo "      name of module to extend, doesn't add imports!"
-    echo
-    echo "  nuhx -o <option>"
-    echo "    opens the created file(s)"
+    printf -- "nuhx: create new haxe project / class here\n"
+    printf -- "usage:\n"
+    printf -- "  nuhx [e]neko <projname>\n"
+    printf -- "  nuhx js <projname>\n"
+    printf -- "  nuhx flash <projname>[ <w>[ <h>[ <fps>]]]\n"
+    printf -- "  nuhx ludum <projname>[ <w>[ <h>[ <fps>]]]\n"
+    printf -- "\n"
+    printf -- "    eneko, neko, js, flash, ludum\n"
+    printf -- "      type of project\n"
+    printf -- "      eneko is an auto-exec neko (runs automatically after a build)\n"
+    printf -- "      ludum flash projects create a bootstrap directory structure\n"
+    printf -- "    <projname>\n"
+    printf -- "      name of project and output files\n"
+    printf -- "    <w>, <h>, <fps>\n"
+    printf -- "      width, height and fps of a flash project\n"
+    printf -- "      (defaults: 640x480, 60 fps)\n"
+    printf -- "\n"
+    printf -- "  nuhx cl <class>[ <extends>]\n"
+    printf -- "    creates an empty .hx class\n"
+    printf -- "    the package is traced up the directory structure\n"
+    printf -- "    until a make.hxml file is encountered\n"
+    printf -- "\n"
+    printf -- "    <class>\n"
+    printf -- "      name of module\n"
+    printf -- "    <extends>\n"
+    printf -- "      name of module to extend, doesn't add imports!\n"
+    printf -- "\n"
+    printf -- "  nuhx -o <option>\n"
+    printf -- "    opens the created file(s)\n"
     exit
 }
 
@@ -65,7 +66,7 @@ if [[ ${mfpath:$((${#a}-1))} != "/" ]]; then
 fi
 
 if [[ ! -w "$mfpath" ]]; then
-    echo "! error: Cannot write in the current directory"
+    printf -- "! error: Cannot write in the current directory\n"
     exit
 fi
 
@@ -77,7 +78,7 @@ if [[ "$1" == "cl" ]]; then
     #   this is where the class file will be put
     libpath="${mfpath}${2}.hx"
     if [[ -f "$libpath" ]]; then
-        echo "! error: lib file already exists"
+        printf -- "! error: lib file already exists\n"
         exit
     fi
     
@@ -118,31 +119,31 @@ if [[ "$1" == "cl" ]]; then
     ppath="${ppath:1}"
     
     if [[ $mfound -eq 1 ]]; then
-        echo "make.hxml located at $cpath"
+        printf -- "make.hxml located at ${cpath}\n"
     else
-        echo "no make.hxml was found"
+        printf -- "no make.hxml was found\n"
     fi
-    echo "creating class file ${2}.hx at"
-    echo "    "`pwd`
+    printf -- "creating class file ${2}.hx at\n"
+    printf -- "    ${mfpath}\n"
     
     # $ext
     #   the string for extension, if this class extends another
     ext=""
     if [[ $# -gt 2 ]]; then
         ext=" extends ${3}"
-        echo "    ( extending $3 )"
+        printf -- "    ( extends ${3} )\n"
     fi
     
     if [[ $pack -eq 1 ]]; then
-        echo "    ( package $ppath )"
+        printf -- "    ( package ${ppath} )\n"
         printf -- "package ${ppath};\n\nclass ${2}${ext} {\n\t\n}" > "$libpath"
     else
-        echo "    ( no package )"
+        printf -- "    ( no package )\n"
         printf -- "class ${2}${ext} {\n\t\n}" > "$libpath"
     fi
     
     if [[ $opt_open -eq 1 ]]; then
-        echo "    ( opening )"
+        printf -- "    ( opening )\n"
         open "$libpath"
     fi
     exit
@@ -160,47 +161,47 @@ mkpath="${mfpath}make.hxml"
 mapath="${mfpath}Main.hx"
 
 if [[ -f "$mkpath" ]]; then
-    echo "! error: make file already exists"
+    printf -- "! error: make file already exists\n"
     exit
 fi
 if [[ -f "$mapath" ]]; then
-    echo "! error: Main file already exists"
+    printf -- "! error: Main file already exists\n"
     exit
 fi
 
 printf -- "class Main {\n\tpublic static function main(){\n\t\t\n\t}\n}" > "$mapath"
 printf -- "${cpmacros}-main Main.hx\n" > "$mkpath"
 if [[ "$1" == "eneko" ]]; then
-    echo "creating an auto-exec neko project at"
-    echo "    "`pwd`
+    printf -- "creating an auto-exec neko project at\n"
+    printf -- "    ${mfpath}\n"
     printf -- "-x ${2}" >> "$mkpath"
     if [[ $opt_open -eq 1 ]]; then
-        echo "    ( opening )"
+        printf -- "    ( opening )"
         open "$mapath"
     fi
 elif [[ "$1" == "neko" ]]; then
-    echo "creating a neko project at"
-    echo "    "`pwd`
+    printf -- "creating a neko project at\n"
+    printf -- "    ${mfpath}\n"
     printf -- "-neko ${2}.n" >> "$mkpath"
     if [[ $opt_open -eq 1 ]]; then
-        echo "    ( opening )"
+        printf -- "    ( opening )"
         open "$mapath"
     fi
 elif [[ "$1" == "js" ]]; then
-    echo "creating a js project at"
-    echo "    "`pwd`
+    printf -- "creating a js project at\n"
+    printf -- "    ${mfpath}\n"
     printf -- "-js ${2}.js" >> "$mkpath"
     if [[ $opt_open -eq 1 ]]; then
-        echo "    ( opening )"
+        printf -- "    ( opening )"
         open "$mapath"
     fi
 elif [[ "$1" == "flash" || "$1" == "ludum" ]]; then
     if [[ "$1" == "flash" ]]; then
-        echo "creating a flash project at"
+        printf -- "creating a flash project at\n"
     else
-        echo "creating an LD flash project at "
+        printf -- "creating an LD flash project at\n"
     fi
-    echo "    "`pwd`
+    printf -- "    ${mfpath}\n"
     
     # $sw, $sh, $sf
     #   width, height, framerate
@@ -226,13 +227,13 @@ elif [[ "$1" == "flash" || "$1" == "ludum" ]]; then
     fi
     
     if [[ $opt_open -eq 1 ]]; then
-        echo "    ( opening )"
+        printf -- "    ( opening )\n"
         open "$mapath"
     fi
 else
     rm "$mapath"
     rm "$mkpath"
-    echo "! error: unknown project type"
-    echo
+    printf -- "! error: unknown project type\n"
+    printf -- "\n"
     usage
 fi

@@ -60,4 +60,25 @@ Creates a skeleton class `MyBetterClass` that extends `MyClass`.
 
 ### `zipclean` - clean .zip after Mac archival
 
+Compressing files with the default Compress function on Mac results in an archive containing a number of useless platform-specific files (presumably) containing some metadata, e.g:
+
+```bash
+$ zipinfo LICENSE.zip
+Archive:  LICENSE.zip   1218 bytes   3 files
+-rw-r--r--  2.1 unx     1083 bX defN 22-Jul-16 16:09 LICENSE
+drwxrwxr-x  2.1 unx        0 bx stor 22-Jul-16 16:38 __MACOSX/
+-rw-r--r--  2.1 unx      247 bX defN 22-Jul-16 16:09 __MACOSX/._LICENSE
+3 files, 1330 bytes uncompressed, 784 bytes compressed:  41.1%
+```
+
+This is tedious and might potentially lead to some security risks in marginal cases, so `zipclean` gets rid of these files:
+
+```bash
+$ zipclean LICENSE.zip
+$ zipinfo LICENSE.zip
+Archive:  LICENSE.zip   789 bytes   1 file
+-rw-r--r--  2.1 unx     1083 bx defN 22-Jul-16 16:09 LICENSE
+1 file, 1083 bytes uncompressed, 649 bytes compressed:  40.1%
+```
+
 ### `macclean` - clean Mac files in directory
