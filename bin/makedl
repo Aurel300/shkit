@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# hx
+#   by Aurel Bílý (2015-16)
+#   https://github.com/Aurel300/shkit
+#   see LICENSE file
+
+function usage(){
+    printf -- "makedl: disposable HTTP server for a file transfer\n"
+    printf -- "usage:\n"
+    printf -- "  makedl <file>[ <port>]\n"
+    printf -- "\n"
+    printf -- "    <file>\n"
+    printf -- "      path to the file to be served\n"
+    printf -- "    <port>\n"
+    printf -- "      port (default 1234)\n"
+    exit
+}
+
+if [[ $# -lt 1 ]]; then
+    usage
+fi
+
+cd `pwd`
+
+# $file
+#   filepath to the target file
+file="$1"
+if [[ ! -f "$file" ]]; then
+    printf -- "! error: no such file\n"
+    exit
+fi
+
+# $port
+#   the port to listen at
+port="1234"
+if [[ $# -gt 1 ]]; then
+    port="$2"
+fi
+
+# $st_size
+#   filesize of the file
+eval $(stat -s "$file")
+printf -- "download ready at localhost:${port}\n"
+{ printf -- "HTTP/1.1 200 OK\x0D\x0AContent-Type: application/octet-stream\x0D\x0AContent-Disposition: attachment; filename=${file}\x0D\x0APragma: no-cache\x0D\x0AContent-Length: ${st_size}\x0D\x0A\x0D\x0A"; cat "$file"; } | nc -l "$port"

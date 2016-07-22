@@ -62,6 +62,18 @@ Creates a skeleton class `MyBetterClass` that extends `MyClass`.
 
 ### `makedl` - temporary one-file HTTP server
 
+Uses `nc` to listen at a given port to serve a file and make the browser download it.
+
+```bash
+makedl MyFile.zip
+```
+
+Now `MyFile.zip` is available at `localhost:1234`. To change the port, use another argument:
+
+```bash
+makedl MyOtherFile.zip 4321
+```
+
 ### `tl` - record a timelapse of your screen(s)
 
 ### `zipclean` - clean .zip after Mac archival
