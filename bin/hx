@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# hx
+#   by Aurel Bílý (2015-16)
+#   https://github.com/Aurel300/shkit
+#   see LICENSE file
+
+if [[ "$1" == "help" || "$1" == "-?" || "$1" == "--help" ]]; then
+    printf -- "hx: simple haxe build tool\n"
+    printf -- "usage:\n"
+    printf -- "  hx\n"
+    printf -- "    build make.hxml in current directory\n"
+    printf -- "\n"
+    printf -- "  hx run, rx\n"
+    printf -- "    build make.hxml and run, if possible\n"
+    printf -- "\n"
+    printf -- "  hx runonly, hx ro\n"
+    printf -- "    run the built files, without building\n"
+    printf -- "\n"
+    printf -- "  hx help\n"
+    printf -- "    show this\n"
+    exit
+fi
+
+cd "$(pwd)"
+
+# $mo
+#   output of build command
+mo=0
+if [[ "$1" != "runonly" && "$1" != "ro" ]]; then
+    if [[ ! -f "make.hxml" ]]; then
+        printf -- "! error: nothing to do - no make.hxml file\n"
+        exit
+    fi
+    haxe make.hxml
+    mo="$?"
+fi
+
+if [[ "$1" == "run" ]]; then
+    if [[ $mo -eq 0 ]]; then
+        # $out
+        #   output for a grep search of make.hxml
+        out=`grep "\-neko" make.hxml`
+        if [[ $? -eq 0 ]]; then
+            printf -- "running as neko... (${out})\n"
+            eval "${out:1}"
+            printf -- "exitcode $?\n"
+            exit
+        fi
+        
+        out=`grep "\-swf " make.hxml`
+        if [[ $? -eq 0 ]]; then
+            printf -- "running as swf... (${out})"
+            open "${out:5}"
+            exit
+        fi
+        
+        printf -- "! error: run unsupported\n"
+    fi
+fi

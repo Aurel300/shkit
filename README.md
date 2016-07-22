@@ -25,7 +25,13 @@ Scripts included
 
 ### `hx` - haxe code utility
 
+By default, build using the `make.hxml` file in the current working directory. `hx run` or the `rx` (shortcut) attempts to run the built files, currently only supported with neko and swf projects.
+
+`hx runonly` or `hx ro` only runs the currently built files (if possible), without building.
+
 ### `rx` - shortcut for `hx run` (build and run)
+
+Just a shortcut for ease of use.
 
 ### `nuhx` - create a new haxe project
 

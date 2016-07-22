@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# rx
+#   by Aurel Bílý (2015-16)
+#   https://github.com/Aurel300/shkit
+#   see LICENSE file
+
+hx run
