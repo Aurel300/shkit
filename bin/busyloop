@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# busyloop
+#   by Aurel Bílý (2015-16)
+#   https://github.com/Aurel300/shkit
+#   see LICENSE file
+
+while [[ true ]]; do
+    printf -- "busyloop: [ $* ] press any key to execute; q to quit"
+    REPLY=""
+    read -d'' -s -n1
+    if [[ "$REPLY" == "q" ]]; then
+        printf -- "\b \n"
+        break
+    else
+        if [[ "$REPLY" == $'\e' ]]; then
+            while read -n2 -s rest; do
+                REPLY+="$rest"
+                printf -- "\b"
+                break
+            done
+            printf -- "     "
+        fi
+        if [[ "$REPLY" != $'\n' ]]; then
+            printf -- "\b \n"
+        fi
+        eval "$@" | paste /dev/null -
+    fi
+done
