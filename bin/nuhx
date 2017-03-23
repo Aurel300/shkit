@@ -11,6 +11,7 @@ cpmacros="--macro addClassPath('/DevProjects/Libs/hx2')\n"
 
 function usage(){
     printf -- "nuhx: create new haxe project / class here\n"
+    printf -- "by Aurel Bílý (https://github.com/Aurel300/shkit)"
     printf -- "usage:\n"
     printf -- "  nuhx [e]neko <projname>\n"
     printf -- "  nuhx js <projname>\n"

@@ -23,6 +23,21 @@ Most of these scripts are tested only on OS X, but some will probably work witho
 Scripts included
 ===
 
+### `busyloop` - execute command with a single keypress
+
+This script executes the rest of its arguments as a command everytime a key is pressed in the terminal and displays the output. Any key press triggers the command (except for q), not just newlines. This could be useful if you find yourself running the same command repeatedly by pressing up arrow, then enter.
+
+```bash
+$ busyloop echo "foo"
+busyloop: [ echo foo ] press any key to execute; q to quit (a)
+    foo
+busyloop: [ echo foo ] press any key to execute; q to quit (enter)
+    foo
+busyloop: [ echo foo ] press any key to execute; q to quit (q)
+```
+
+If the first argument supplied is `-n`, `busyloop` will only wait for newlines to execute the command. To exit, type q, then enter.
+
 ### `hx` - haxe code utility
 
 By default, build using the `make.hxml` file in the current working directory. `hx run` or the `rx` (shortcut) attempts to run the built files, currently only supported with neko and swf projects.
@@ -73,6 +88,8 @@ Now `MyFile.zip` is available at `localhost:1234`. To change the port, use anoth
 ```bash
 makedl MyOtherFile.zip 4321
 ```
+
+Part of the output of `ifconfig` is also displayed in order to help you find your own IP address.
 
 ### `tl` - record a timelapse of your screen(s)
 

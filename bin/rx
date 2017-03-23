@@ -6,3 +6,4 @@
 #   see LICENSE file
 
 hx run
+exit $?

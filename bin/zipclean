@@ -5,8 +5,11 @@
 #   https://github.com/Aurel300/shkit
 #   see LICENSE file
 
+# no arguments
+#   show usage
 if [[ $# -lt 1 ]]; then
     printf -- "zipclean: mac .zip cleaning tool\n"
+    printf -- "by Aurel Bílý (https://github.com/Aurel300/shkit)\n"
     printf -- "usage:\n"
     printf -- "  zipclean <file>[ <file>...]\n"
     printf -- "\n"

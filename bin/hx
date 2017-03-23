@@ -5,8 +5,10 @@
 #   https://github.com/Aurel300/shkit
 #   see LICENSE file
 
+# show usage
 if [[ "$1" == "help" || "$1" == "-?" || "$1" == "--help" ]]; then
     printf -- "hx: simple haxe build tool\n"
+    printf -- "by Aurel Bílý (https://github.com/Aurel300/shkit)\n"
     printf -- "usage:\n"
     printf -- "  hx\n"
     printf -- "    build make.hxml in current directory\n"
@@ -36,7 +38,7 @@ if [[ "$1" != "runonly" && "$1" != "ro" ]]; then
     mo="$?"
 fi
 
-if [[ "$1" == "run" ]]; then
+if [[ "$1" == "run" || "$1" == "runonly" || "$1" == "ro" ]]; then
     if [[ $mo -eq 0 ]]; then
         # $out
         #   output for a grep search of make.hxml
@@ -55,6 +57,14 @@ if [[ "$1" == "run" ]]; then
             exit
         fi
         
+        out=`grep "\-cpp " make.hxml`
+        if [[ $? -eq 0 ]]; then
+            printf -- "running as cpp... (${out})\n"
+            "${out:5}/Main"
+            exit
+        fi
+        
         printf -- "! error: run unsupported\n"
     fi
 fi
+exit $mo

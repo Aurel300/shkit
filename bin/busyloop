@@ -5,25 +5,57 @@
 #   https://github.com/Aurel300/shkit
 #   see LICENSE file
 
+# no arguments
+#   show usage
+if [[ $# -lt 1 ]]; then
+    printf -- "busyloop: execute a command with a single keypress\n"
+    printf -- "by Aurel Bílý (https://github.com/Aurel300/shkit)"
+    printf -- "usage:\n"
+    printf -- "  busyloop <command[ arguments ...]>\n"
+    printf -- "    executes <command> with any additional arguments\n"
+    printf -- "    and displays the output every time a key is pressed\n"
+    printf -- "    q to quit the loop\n"
+    printf -- "\n"
+    printf -- "  busyloop -n <command[ arguments ...]>\n"
+    printf -- "    listen to newlines only instead\n"
+    exit
+fi
+
+nmode=0
+if [[ "$1" == "-n" ]]; then
+    nmode=1
+    shift
+fi
+
 while [[ true ]]; do
-    printf -- "busyloop: [ $* ] press any key to execute; q to quit"
-    REPLY=""
-    read -d'' -s -n1
-    if [[ "$REPLY" == "q" ]]; then
-        printf -- "\b \n"
-        break
-    else
-        if [[ "$REPLY" == $'\e' ]]; then
-            while read -n2 -s rest; do
-                REPLY+="$rest"
-                printf -- "\b"
-                break
-            done
-            printf -- "     "
-        fi
-        if [[ "$REPLY" != $'\n' ]]; then
+    if [[ $nmode -eq 0 ]]; then
+        printf -- "busyloop: [ $* ] press any key to execute; q to quit"
+        REPLY=""
+        read -d'' -s -n1
+        if [[ "$REPLY" == "q" ]]; then
             printf -- "\b \n"
+            break
+        else
+            if [[ "$REPLY" == $'\e' ]]; then
+                while read -n2 -s rest; do
+                    REPLY+="$rest"
+                    printf -- "\b"
+                    break
+                done
+                printf -- "     "
+            fi
+            if [[ "$REPLY" != $'\n' ]]; then
+                printf -- "\b \n"
+            fi
+            eval "$@" | paste /dev/null -
         fi
-        eval "$@" | paste /dev/null -
+    else
+        printf -- "busyloop: [ $* ] press enter to execute; q + enter to quit"
+        read
+        if [[ "$REPLY" == "q" ]]; then
+            break
+        else
+            eval "$@" | paste /dev/null -
+        fi
     fi
 done

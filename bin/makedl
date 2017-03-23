@@ -7,6 +7,7 @@
 
 function usage(){
     printf -- "makedl: disposable HTTP server for a file transfer\n"
+    printf -- "by Aurel Bílý (https://github.com/Aurel300/shkit)\n"
     printf -- "usage:\n"
     printf -- "  makedl <file>[ <port>]\n"
     printf -- "\n"
@@ -17,6 +18,8 @@ function usage(){
     exit
 }
 
+# no arguments
+#   show usage
 if [[ $# -lt 1 ]]; then
     usage
 fi
@@ -41,5 +44,6 @@ fi
 # $st_size
 #   filesize of the file
 eval $(stat -s "$file")
-printf -- "download ready at localhost:${port}\n"
+printf -- "download ready at localhost:${port}, guessing IP addresses:\n"
+ifconfig | grep "inet "
 { printf -- "HTTP/1.1 200 OK\x0D\x0AContent-Type: application/octet-stream\x0D\x0AContent-Disposition: attachment; filename=${file}\x0D\x0APragma: no-cache\x0D\x0AContent-Length: ${st_size}\x0D\x0A\x0D\x0A"; cat "$file"; } | nc -l "$port"
