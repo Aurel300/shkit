@@ -93,6 +93,35 @@ Part of the output of `ifconfig` is also displayed in order to help you find you
 
 ### `tl` - record a timelapse of your screen(s)
 
+Records timelapses of your screen by taking screenshots at a regular interval. The result is a sequence of .jpg files which are very easily put together into a video e.g. with `ffmpeg` or After Effects.
+
+```bash
+$ tl help
+tl: timelapse recorder
+by Aurel Bílý (https://github.com/Aurel300/shkit)
+usage:
+  tl[ -l][ <path>[ <interval>]]
+    start recording the screen(s)
+    every frame is saved to <path>, prefixed with
+      p (main screen) or q (second screen, if present)
+    attempts to continue a previously-started timelapse
+      if <path> contains files in the correct format
+
+    -l
+      if specified, logs start / stop times into tl_log.txt
+      useful for keeping track of multiple sessions
+    <path>
+      path in which to save the recorded files,
+        directory created if needed
+      default: TL
+    <interval>
+      interval in seconds between frames
+      default: 5
+
+  tl help
+    show this
+```
+
 ### `zipclean` - clean .zip after Mac archival
 
 Compressing files with the default Compress function on Mac results in an archive containing a number of useless platform-specific files (presumably) containing some metadata, e.g:
@@ -117,3 +146,5 @@ Archive:  LICENSE.zip   789 bytes   1 file
 ```
 
 ### `macclean` - clean Mac files in directory
+
+(todo)

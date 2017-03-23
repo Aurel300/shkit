@@ -1,0 +1,136 @@
+#!/bin/bash
+
+# tl
+#   by Aurel Bílý (2015-17)
+#   https://github.com/Aurel300/shkit
+#   see LICENSE file
+
+# show usage
+if [[ "$1" == "help" || "$1" == "-?" || "$1" == "--help" ]]; then
+    printf -- "tl: timelapse recorder\n"
+    printf -- "by Aurel Bílý (https://github.com/Aurel300/shkit)\n"
+    printf -- "usage:\n"
+    printf -- "  tl[ -l][ <path>[ <interval>]]\n"
+    printf -- "    start recording the screen(s)\n"
+    printf -- "    every frame is saved to <path>, prefixed with\n"
+    printf -- "      p (main screen) or q (second screen, if present)\n"
+    printf -- "    attempts to continue a previously-started timelapse\n"
+    printf -- "      if <path> contains files in the correct format\n"
+    printf -- "\n"
+    printf -- "    -l\n"
+    printf -- "      if specified, logs start / stop times into tl_log.txt\n"
+    printf -- "      useful for keeping track of multiple sessions\n"
+    printf -- "    <path>\n"
+    printf -- "      path in which to save the recorded files,\n"
+    printf -- "        directory created if needed\n"
+    printf -- "      default: TL\n"
+    printf -- "    <interval>\n"
+    printf -- "      interval in seconds between frames\n"
+    printf -- "      default: 5\n"
+    printf -- "\n"
+    printf -- "  tl help\n"
+    printf -- "    show this\n"
+    exit
+fi
+
+# $log
+#   1 iff logging start / stop times
+log=0
+if [[ "$1" == "-l" ]]; then
+    log=1
+    shift
+fi
+
+# $path
+#   target directory
+path="TL"
+if [[ "$1" != "" ]]; then
+    path="$1"
+fi
+
+# $inte
+#   interval between frames
+inte=5
+if [[ "$2" != "" ]]; then
+    inte="$2"
+fi
+
+# attempt to create target directory
+if [[ ! -e "$path" ]]; then
+    mkdir -p "$path"
+    sleep 1
+    if [[ ! -e "$path" ]]; then
+        echo "error: cannot create target directory"
+        exit 1
+    fi
+elif [[ ! -d "$path" ]]; then
+    echo "error: target exists, but not a directory"
+    exit 1
+fi
+
+# attempt to continue an existing timelapse
+i=1
+while [[ -e "$path/p$i.jpg" ]]; do
+    ((i++))
+done
+
+# $starti
+#   starting frame index
+starti=$((i))
+
+# $stime
+#   starting time (readable)
+stime=$(date)
+
+# $sepoc
+#   starting time (UNIX epoch format)
+sepoc=$(date +"%s")
+
+clear
+printf -- "tl: timelapse recorder\n"
+printf -- "by Aurel Bílý (https://github.com/Aurel300/shkit)\n"
+printf -- "press control-c to stop recording\n"
+printf -- "dir: $path\n"
+printf -- "t:   $inte seconds / frame\n"
+printf -- "tim: $stime\n"
+
+function cleanup(){
+    # $etime
+    #   ending time (redable)
+    etime=$(date)
+    
+    # $eepoc
+    #   ending time (UNIX epoch format)
+    eepoc=$(date +"%s")
+    
+    # $diff
+    #   difference between end and start (in frames)
+    diff=$(($i - $starti))
+    
+    # $difftime
+    #   difference between end and start (in seconds)
+    difftime=$(($eepoc - $sepoc))
+    
+    diffmins=$(($diff / 60))
+    diffsecs=$(($diff % 60))
+    
+    printf -- "\nrecorded $diff frames\n"
+    printf -- "in $diffmins minutes and $diffsecs seconds\n"
+    if [[ $log -eq 1 ]]; then
+        printf -- "-STOP $etime / p$i.jpg ($diff frames)\n" >> "tl_log.txt"
+    fi
+}
+
+# register the break handler
+trap cleanup EXIT
+
+if [[ $log -eq 1 ]]; then
+    printf -- "START $stime / p$i.jpg\n" >> "tl_log.txt"
+fi
+
+while [[ true ]]; do
+    printf -- "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bfr:  $i"
+    screencapture -t jpg -x "$path/p$i.jpg" "$path/q$i.jpg"
+    ((i++))
+    sleep $inte
+done
