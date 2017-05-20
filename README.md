@@ -10,10 +10,11 @@ To use these tools, simply download the tools you'd like or clone this repositor
 git clone https://github.com/Aurel300/shkit.git
 ```
 
-Then add the resulting `shkit` directory to your `PATH` environment variable, by adding this line to your `~/.profile`:
+Then add the resulting `shkit` directory to your `PATH` environment variable and run the initialisation script (if you want to use `iscool`), by adding these lines to your `~/.profile`:
 
 ```bash
 export PATH="/path/to/shkit/bin:$PATH"
+source "/path/to/shkit/init.sh"
 ```
 
 ### Compatibility
