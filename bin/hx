@@ -61,6 +61,15 @@ if [[ "$1" == "run" || "$1" == "runonly" || "$1" == "ro" ]]; then
         if [[ $? -eq 0 ]]; then
             printf -- "running as cpp... (${out})\n"
             "${out:5}/Main"
+            printf -- "exitcode $?\n"
+            exit
+        fi
+        
+        out=`grep "\-js " make.hxml`
+        if [[ $? -eq 0 ]]; then
+            printf -- "running as javascript... (${out})\n"
+            node "${out:4}"
+            printf -- "exitcode $?\n"
             exit
         fi
         

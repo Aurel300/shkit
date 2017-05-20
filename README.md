@@ -145,6 +145,17 @@ Archive:  LICENSE.zip   789 bytes   1 file
 1 file, 1083 bytes uncompressed, 649 bytes compressed:  40.1%
 ```
 
+### `iscool` - sound notification after command exit
+
+(This requires `sox` to be installed.)
+
+This little script can be used right after executing another command. It plays a "success" bloop if the exit code of the previous command is 0, and an "error" noise if not. The intended usage is to notify of script success / failure for scripts which take a long time to complete and are usually put in the background. E.g. with a long compilation:
+
+```bash
+$ hx; iscool
+(will make a noise if hx produced an error, a bloop otherwise)
+```
+
 ### `macclean` - clean Mac files in directory
 
 (todo)
